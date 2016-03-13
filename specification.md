@@ -123,7 +123,7 @@ These are index specifiers that can be immediately resolved. No extra informatio
 	- Example : `2:3..10` -> `2,5,8`
 - Step Range : 
 	- Format : `A:B:C `
-	- Contains a range of integers that starts at A, and ends at A + B\*C. . So `C+1` is the length of the list, with C=0 meaning only A and C=1 meaning `A, A + C`, and 2 meaning `A, A + C, A + 2\*C` and so on.
+	- Contains a range of integers that starts at A, and ends at A + B\*C. . So `C+1` is the length of the list, with C=0 meaning only A and C=1 meaning `A, A + C`, and 2 meaning `A, A + C, A + 2*C` and so on.
 	- Example: `2:3:5` -> `2,5,8,11,14,17`
 
 ## Implicit Index Specifiers
