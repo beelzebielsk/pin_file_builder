@@ -52,7 +52,7 @@ execute, KEY[0]
 
 The latter is easier to maintain, since you can change a lot of assignments quickly. It's also more descriptive. You can come back to an older project and know what to expect when you put your program on a board.
 
-# How to use
+## How to use
 
 There are two major programs here:
 - **pin\_parser.js**, which transforms a file that's in the descriptive shorthand demonstrated above and unwraps it such that there's only one index in between each set of square braces.
@@ -65,47 +65,66 @@ There are two major programs here:
 
 # Specification of Shorthand
 
-## Rules
+Each shorthand line has the following form:
 
-- Both index specifiers must have the same length.
-	- There is no point in trying to make them have differing lengths since
-	we can't re-use old pins without overwriting assignemnts. We could try to
-	extrapolate pins, but one should make their intent clear.
-- Both at least one index specifier must be explicit.
+	name[ index_specifier ], name[ index_specifier ]
+
+Where the name on the left is the name of a signal in a program and the name on the right is the descriptive name
+of a pin, or set of pins, such as "SW", or "HEX0".
+
+Example:
+	
+	output[0..5], LEDR[..]
+
+	{ output } [ {       0..5      } ], { LEDR } [ {        ..       } ]
+	{  name  }   { index_specifier }    { name }   { index_specifier }
+
+The result of the above shorthand line is to assign LEDR[0] to output[0], LEDR[1] to output[1] and so on.
 
 ## Index Specifiers
 
-This is a string that specifies a non-empty range of indices. The program will print lines based on these indices.
+An **index specifier** is a shorthand for a list of indices. `0..5` is a short way of saying `0,1,2,3,4,5`.
 
-### Specifier Objects:
+There are two major types of index specifiers: **explicit specifiers** and **implicit specifiers**.
+Plainly speaking, an explicit specifier is a specifier that gives enough information to go from a shorthand for a list of indices straight to the list of indices. `0..5` is explicit because I know that it includes every integer from in between 0 and 5 inclusive.
 
+An *implicit specifier* is a specifier that does not give enough information to go from a shorthand list to a full list. They require a little bit of context to understand what they mean. `..` is an example of an implicit specifier. The extra information needed for an implicit specifier is provided by an explicit specifier on the same line.
 
-The have the following properties:
-- content : The completely resolved array of indices.
-- text : The actual specifier.
-- Type : Implicit/Explicit (either 'e' or 'i')
-- Name : specifier name, such as "simpleExplicit"
-- match : the result of a format match.
-- Length : The length of the completely resolved array of indices. This is useful for resolving implicit specifiers.
+So the meaning of the example line is: Use indices `0,1,2,3,4,5` of the signal output, and use the exact same index list for RED LED's.
+
+## Syntax Rules
+
+- Non-blank lines must contain at least one comma in order to separate the signal name from the pin name.
+- Blank lines are allowed.
+- Index specifiers must be placed in between square brackets.
+- An index specifier must match a known format of index specifier, which are listed below.
+- Both index specifiers must have the same length.
+	- There is no point in trying to make them have differing lengths since
+	we can't re-use old pins without overwriting assignemnts.
+- For every line, at least one index specifier must be explicit.
 
 ## Explicit Index specifiers
 
 These are index specifiers that can be immediately resolved. No extra information is necessary to figure out the indices that are specified.
 
 - Simple Explicit specifier :
-	- Format : `[A,B,C,..] `
+	- Format : `A,B,C,..`
 	- Explicit list of indices. The most basic specifier.
+	- Example : `2,3,5,7,11,13`.
 - Simple Range :
-	- Format : `[A..B]`
+	- Format : `A..B`
 	- Inclusive range. Contains every integer x in range A <= x <= B.
+	- Example :  `3..5` -> `3,4,5`
 - Step To End :
-	- Format : `[A:B..C] `
+	- Format : `A:B..C`
 	- Inclusive. Contains all following integers:
 						{A+B*x : A+B*x <= C}
 						In other words, A is a start, C is an end, and B is a step amount.
+	- Example : `2:3..10` -> `2,5,8`
 - Step Range : 
-	- Format : `[A:B:C] `
-	- Contains a range of integers that starts at A, and ends at A + B\*C. . So C controls the length of the list, with 0 meaning only A and 1 meaning A, A + C, and 2 meaning A, A + C, A + 2\*C and so on.
+	- Format : `A:B:C `
+	- Contains a range of integers that starts at A, and ends at A + B\*C. . So `C+1` is the length of the list, with C=0 meaning only A and C=1 meaning `A, A + C`, and 2 meaning `A, A + C, A + 2\*C` and so on.
+	- Example: `2:3:5` -> `2,5,8,11,14,17`
 
 ## Implicit Index Specifiers
 
@@ -118,7 +137,7 @@ NOTE: Implicit index specifiers are not limited to 'TO' entries. They can also b
 ```
 
 - Range Reuse:
-	- Format : `[..] `
+	- Format : `.. `
 	- Uses the same index specifier as an explcit index specifier.
 	- Example: 
 		```
@@ -127,7 +146,7 @@ NOTE: Implicit index specifiers are not limited to 'TO' entries. They can also b
 		Explicit Form : Array[0..5] , SW[0..5]
 		```
 - Offset Range Reuse: 
-	- Format : `[A..] `
+	- Format : `A.. `
 	- Uses the same indices in an explicit index specifier, but shifted up by 'A'. In other words, let 'j' be an index in this implicit list: for every index 'i' in an explicit list, j = A + i.
 	- Example:
 		```
@@ -136,7 +155,7 @@ NOTE: Implicit index specifiers are not limited to 'TO' entries. They can also b
 		Explicit Form : array[3..8] , SW[1..6]
 		```
 - Length Forward : 
-	- Format : `[A..#] `
+	- Format : `A..# `
 	- The range here doesn't use an explicit index list itself, but rather the length of an explicit index list. The index specifier starts from A and proceeds to [A..(A+length-1)].
 	- Example:
 		```
@@ -158,7 +177,7 @@ NOTE: Implicit index specifiers are not limited to 'TO' entries. They can also b
 		```
 
 - Length Backward 
-	- Format : `[#..A] `
+	- Format : `#..A `
 	- The range here doesn't use an explicit index list itself, but rather the length of an explicit index list. The index specifier starts from (A - length + 1) and proceeds to A.
 	- Example:
 		```
@@ -180,7 +199,7 @@ NOTE: Implicit index specifiers are not limited to 'TO' entries. They can also b
 		```
 
 - Step Range Length Reuse : 
-	- Format : `[A:B:#] `
+	- Format : `A:B:#`
 	- The range here doesn't use an explicit index list itself, but rather the length of an explicit index list. This specifier works just like the explicit index specifier of similar form: [A:B:C], where 'C' is replaced by the length of an explicit index specifier minus 1. [A:B:(length-1)].
 	- Example:
 		```
@@ -206,6 +225,18 @@ NOTE: Implicit index specifiers are not limited to 'TO' entries. They can also b
 
 		Explicit Form : array[4,7,10,13,16,19] , SW[2,3,5,7,11,13]
 		```
+
+# Program Stuff
+
+### Specifier Objects:
+
+The have the following properties:
+- content : The completely resolved array of indices.
+- text : The actual specifier.
+- Type : Implicit/Explicit (either 'e' or 'i')
+- Name : specifier name, such as "simpleExplicit"
+- match : the result of a format match.
+- Length : The length of the completely resolved array of indices. This is useful for resolving implicit specifiers.
 
 Line form:
 ```
