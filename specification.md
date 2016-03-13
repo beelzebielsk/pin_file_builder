@@ -25,18 +25,18 @@ The have the following properties:
 These are index specifiers that can be immediately resolved. No extra information is necessary to figure out the indices that are specified.
 
 - Simple Explicit specifier :
-	- Format : [A,B,C,..] 
+	- Format : `[A,B,C,..] `
 	- Explicit list of indices. The most basic specifier.
 - Simple Range :
-	- Format : [A..B]
+	- Format : `[A..B]`
 	- Inclusive range. Contains every integer x in range A <= x <= B.
 - Step To End :
-	- Format : [A:B..C] 
+	- Format : `[A:B..C] `
 	- Inclusive. Contains all following integers:
 						{A+B*x : A+B*x <= C}
 						In other words, A is a start, C is an end, and B is a step amount.
 - Step Range : 
-	- Format : [A:B:C] 
+	- Format : `[A:B:C] `
 	- Contains a range of integers that starts at A, and ends at A + B\*C. . So C controls the length of the list, with 0 meaning only A and 1 meaning A, A + C, and 2 meaning A, A + C, A + 2\*C and so on.
 
 # Implicit Index Specifiers
@@ -48,19 +48,19 @@ This means that there must be at least one explciit index specifier on every lin
 NOTE: Implicit index specifiers are not limited to 'TO' entries. They can also be used in 'LOCATION' entries.
 
 - Range Reuse:
-	- Format : [..] 
+	- Format : `[..] `
 	- Uses the same index specifier as an explcit index specifier.
 	- Example: 
 		Implicit Form : Array[..]   , SW[0..5]
 		Explicit Form : Array[0..5] , SW[0..5]
 - Offset Range Reuse: 
-	- Format : [A..] 
+	- Format : `[A..] `
 	- Uses the same indices in an explicit index specifier, but shifted up by 'A'. In other words, let 'j' be an index in this implicit list: for every index 'i' in an explicit list, j = A + i.
 	- Example:
 		Implicit Form : array[2..]  , SW[1..6]
 		Explicit Form : array[3..8] , SW[1..6]
 - Length Forward : 
-	- Format : [A..#] 
+	- Format : `[A..#] `
 	- The range here doesn't use an explicit index list itself, but rather the length of an explicit index list. The index specifier starts from A and proceeds to [A..(A+length-1)].
 	- Example:
 		Implicit Form : array[5..#], SW[1..6]
@@ -73,7 +73,7 @@ NOTE: Implicit index specifiers are not limited to 'TO' entries. They can also b
 		Explicit Form : array[5..9], SW[2,3,5,7,11]
 
 - Length Backward 
-	- Format : [#..A] 
+	- Format : `[#..A] `
 	- The range here doesn't use an explicit index list itself, but rather the length of an explicit index list. The index specifier starts from (A - length + 1) and proceeds to A.
 	- Example:
 		Implicit Form : array[#..8], SW[1..6]
@@ -86,7 +86,7 @@ NOTE: Implicit index specifiers are not limited to 'TO' entries. They can also b
 		Explicit Form : array[4..8], SW[2,3,5,7,11]
 
 - Step Range Length Reuse : 
-	- Format : [A:B:#] 
+	- Format : `[A:B:#] `
 	- The range here doesn't use an explicit index list itself, but rather the length of an explicit index list. This specifier works just like the explicit index specifier of similar form: [A:B:C], where 'C' is replaced by the length of an explicit index specifier minus 1. [A:B:(length-1)].
 	- Example:
 		Implicit Form : array[0:2:#]     , SW[0..5]
