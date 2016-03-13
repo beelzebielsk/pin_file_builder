@@ -2,6 +2,7 @@
 var basicLine = require("./validation.js").afterParseLine;
 var blankLine = require("./validation.js").blankLine;
 var fs = require("fs");
+var programDirectory = ( process.env.PROG_DIR ? process.env.PROG_DIR : "./" );
 
 // Set up input and output to and from program.
 var input = process.stdin;
@@ -9,7 +10,7 @@ var output = process.stdout;
 output.write("TO, LOCATION\n");
 
 // Get the pin table and file to run replacer on.
-var pinTableStream = fs.createReadStream("./pin_table.json");
+var pinTableStream = fs.createReadStream(programDirectory + "pin_table.json");
 var fileContent = "";
 var pinTable = "";
 input.on('data', (chunk) => { fileContent += chunk; } );
