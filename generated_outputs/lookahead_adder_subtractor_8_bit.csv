@@ -1,0 +1,31 @@
+To, Location
+A[0], SW[0]
+A[1], SW[1]
+A[2], SW[2]
+A[3], SW[3]
+A[4], SW[4]
+A[5], SW[5]
+A[6], SW[6]
+A[7], SW[7]
+
+B[0], SW[8]
+B[1], SW[9]
+B[2], SW[10]
+B[3], SW[11]
+B[4], SW[12]
+B[5], SW[13]
+B[6], SW[14]
+B[7], SW[15]
+
+MODE, SW[17]
+
+RESULT[0], LEDR[0]
+RESULT[1], LEDR[1]
+RESULT[2], LEDR[2]
+RESULT[3], LEDR[3]
+RESULT[4], LEDR[4]
+RESULT[5], LEDR[5]
+RESULT[6], LEDR[6]
+RESULT[7], LEDR[7]
+
+OVERFLOW, LEDR[17]
