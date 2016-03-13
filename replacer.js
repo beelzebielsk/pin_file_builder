@@ -1,11 +1,14 @@
 "use strict"
 var basicLine = require("./validation.js").afterParseLine;
 var blankLine = require("./validation.js").blankLine;
-
 var fs = require("fs");
+
+// Set up input and output to and from program.
 var input = process.stdin;
 var output = process.stdout;
 output.write("TO, LOCATION\n");
+
+// Get the pin table and file to run replacer on.
 var pinTableStream = fs.createReadStream("./pin_table.json");
 var fileContent = "";
 var pinTable = "";
