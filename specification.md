@@ -4,6 +4,7 @@
 	- There is no point in trying to make them have differing lengths since
 	we can't re-use old pins without overwriting assignemnts. We could try to
 	extrapolate pins, but one should make their intent clear.
+- Both at least one index specifier must be explicit.
 
 # Index Specifiers
 
@@ -12,13 +13,16 @@ This is a string that specifies a non-empty range of indices. The program will p
 ## Specifier Objects:
 
 The have the following properties:
-- content : What it actually is
+- content : The completely resolved array of indices.
+- text : The actual specifier.
 - Type : Implicit/Explicit (either 'e' or 'i')
-- Name : specifier name, such as "simple_explicit"
-- match : the result of a match function.
-- Length : For explicit specifiers, for the use of implicit resolution. Is the number of indices in a list of indices.
+- Name : specifier name, such as "simpleExplicit"
+- match : the result of a format match.
+- Length : The length of the completely resolved array of indices. This is useful for resolving implicit specifiers.
 
 # Explicit Index specifiers
+
+These are index specifiers that can be immediately resolved. No extra information is necessary to figure out the indices that are specified.
 
 - Simple Explicit specifier :
 	- Format : [A,B,C,..] 
@@ -108,9 +112,3 @@ Vim Specific Regex: \v(\w+)\[([^]]+)]\s*,\s*(\w+)\[([^]]+)]
 ( \w+     ) "[" ( [^]]+              ) "]," ( \w+           ) "[" ( [^]]+                    ) ]
 ( TO_name )     ( TO_index_specifier )      ( LOCATION_name )     ( LOCATION_index_specifier )
 ```
-
-# TODO
-
-- Get command parser working.
-- Get explicit specifiers working.
-- Get first four implicit specifiers working.
