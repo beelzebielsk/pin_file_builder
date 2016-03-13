@@ -249,3 +249,8 @@ Vim Specific Regex: \v(\w+)\[([^]]+)]\s*,\s*(\w+)\[([^]]+)]
 ( \w+     ) "[" ( [^]]+              ) "]," ( \w+           ) "[" ( [^]]+                    ) ]
 ( TO_name )     ( TO_index_specifier )      ( LOCATION_name )     ( LOCATION_index_specifier )
 ```
+
+# TODO
+
+- Figure out cleaner way to find files relative to javascript files, such as pin_table.json.
+	- Current way is to pass an environment variable through a shell script.

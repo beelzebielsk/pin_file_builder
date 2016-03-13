@@ -11,7 +11,6 @@ module.exports = {
 			implicitSpec.content = 
 				explicitSpec.content.map( cur => cur + offset );
 			implicitSpec.length = implicitSpec.content.length;
-
 		},
 	lengthForward : 
 		function (implicitSpec, explicitSpec){
