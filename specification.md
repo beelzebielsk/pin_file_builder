@@ -12,7 +12,7 @@ This is a string that specifies a non-empty range of indices. The program will p
 
 ## Specifier Objects:
 
-```
+
 The have the following properties:
 - content : The completely resolved array of indices.
 - text : The actual specifier.
@@ -20,7 +20,7 @@ The have the following properties:
 - Name : specifier name, such as "simpleExplicit"
 - match : the result of a format match.
 - Length : The length of the completely resolved array of indices. This is useful for resolving implicit specifiers.
-```
+
 
 # Explicit Index specifiers
 
