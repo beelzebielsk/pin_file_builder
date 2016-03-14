@@ -1,0 +1,5 @@
+data_in[0..3], SW[..]
+UNIT_SELECT[0..1], SW[4..]
+CHIP_WE, SW[17]
+CHIP_SEL, SW[16]
+CHIP_OE, SW[15]

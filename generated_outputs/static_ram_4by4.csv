@@ -1,0 +1,10 @@
+To, Location
+data_in[0], SW[0]
+data_in[1], SW[1]
+data_in[2], SW[2]
+data_in[3], SW[3]
+UNIT_SELECT[0], SW[4]
+UNIT_SELECT[1], SW[5]
+CHIP_WE, SW[17]
+CHIP_SEL, SW[16]
+CHIP_OE, SW[15]
