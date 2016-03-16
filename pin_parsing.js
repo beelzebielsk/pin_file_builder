@@ -160,12 +160,12 @@ function determineSpecifier(specifierString){
 	// If it wasn't explicit, match it against implicit formats.
 	// match any explicit formats.
 	if (!matched) {
-		for ( let format in validation.implicitSpecifierFormats ){
+		for ( let format in validation.implicitSpecifierFormats ) {
 			var matchResult = specifierString.match(
 					validation.implicitSpecifierFormats[format] 
 					);
-			//console.log(format);
-			//console.log( validation.implicitSpecifierFormats[format].source );
+			//console.log(format); //DEBUG
+			//console.log( validation.implicitSpecifierFormats[format].source ); //DEBUG
 			if (matchResult) {
 				matched = true;
 				for (var i = 1; i < matchResult.length; i++) {
