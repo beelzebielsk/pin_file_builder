@@ -33,7 +33,7 @@ validation.numberCap = "(" + validation.number + ")";
 
 // Specifier Name: Simple Explicit
 // Description:
-//	 Comma separated list of at least on index.
+//	 Comma separated list of at least one index.
 // Format: {number} ["," {number}]*
 
 explicitSpecifierFormats.simpleExplicit = 
