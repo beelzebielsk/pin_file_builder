@@ -1,16 +1,29 @@
 "use strict"
+
+// ****************************************
+// PREAMBLE
+// ****************************************
+
 var fs = require('fs');
 var stream = require('stream');
-// Includes information about syntactically correct lines,
-// as well as certain entities in text that appear often.
-var validation = require("./validation.js");
+
+// Has common regular expressions that are useful for
+// validating synatx.
+var validation = require("./formats.js").validation;
+
+var explicitSpecifierFormats = 
+	require("./formats.js").explicitSpecifierFormats;
+
+var implicitSpecifierFormats =
+	require("./formats.js").implicitSpecifierFormats;
+	
 // This is an associative array of functions, each of
 // which take a single argument: an explicit index specifier.
 // For a specifier of 'name', the function
 //		explicitResolutionTable[name]
 // Will turn an explicit index specifier of the format 'name' into a 
 // simple explicit specifier.
-var explicitResolutionTable = require("./explicitResolution.js");
+var explicitResolutionTable = require("./formats.js").explicitResolution;
 
 // This is an associative array of functions, each of
 // which take a single argument: an implicit index specifier.
@@ -18,7 +31,11 @@ var explicitResolutionTable = require("./explicitResolution.js");
 //		implicitResolutionTable[name]
 // Will turn an implicit index specifier of the format 'name' into an 
 // explicit specifier.
-var implicitResolutionTable = require("./implicitResolution.js");
+var implicitResolutionTable = require("./formats.js").implicitResolution;
+
+// ****************************************
+// INPUT/OUTPUT
+// ****************************************
 
 // Get arguments: input file, output file:
 //	-- If no arguments, then use std_in for input and std_out for output 
@@ -42,18 +59,29 @@ var fileContent = "";
 input.on('data', (chunk) => { fileContent += chunk; } )
 input.on('end', () => { processFile(fileContent); } );
 
+// ****************************************
+// PARSING
+// ****************************************
+
 function processFile(fileContents){
 	// Line number is maintained for use in
 	// error reporting.
 	var lineNumber = 1;
+	// Create an array of lines to parse.
 	var lines = fileContents.trim().split('\n');
+	// Handling header: If header is present
+	// in pinfile, ignore it. Print header
+	// to output file.
+	if (lines[0].match( validation.header ) )
+		lines = lines.slice(1);
 	output.write("To, Location\n");
+
 	for (var line of lines){
 		try {
 			processLine(line);
 		} catch (e) {
-			if (e instanceof SyntaxError) {
-				console.log( "Error at Line Number: " + lineNumber );
+			if (e instanceof SyntaxError) { 
+				console.log( "Error at Line Number: " + lineNumber ); 
 				console.log( e.message );
 				process.exit(1);
 			}
@@ -124,7 +152,8 @@ function processLine(line){
 	// Now, both specifiers are necessarily explicit.
 	if (spec0.length != spec1.length) {
 		let error = new SyntaxError;
-		error.message += "Cannot have two specifiers with different index lengths.\n";
+		error.message += 
+			"Cannot have two specifiers with different index lengths.\n";
 		error.message += "Culprits: " + specStr0 + " " + specStr1;
 		throw error;
 	}
@@ -138,9 +167,9 @@ function determineSpecifier(specifierString){
 	var specifier = {};
 
 	// Check specifierString agaisnt explicit formats.
-	for( let format in validation.explicitSpecifierFormats ){
+	for( let format in explicitSpecifierFormats ){
 		var matchResult = specifierString.match(
-				validation.explicitSpecifierFormats[format] 
+				explicitSpecifierFormats[format] 
 				);
 		if (matchResult) {
 			matched = true;
@@ -160,12 +189,12 @@ function determineSpecifier(specifierString){
 	// If it wasn't explicit, match it against implicit formats.
 	// match any explicit formats.
 	if (!matched) {
-		for ( let format in validation.implicitSpecifierFormats ) {
+		for ( let format in implicitSpecifierFormats ) {
 			var matchResult = specifierString.match(
-					validation.implicitSpecifierFormats[format] 
+					implicitSpecifierFormats[format] 
 					);
 			//console.log(format); //DEBUG
-			//console.log( validation.implicitSpecifierFormats[format].source ); //DEBUG
+			//console.log( implicitSpecifierFormats[format].source ); //DEBUG
 			if (matchResult) {
 				matched = true;
 				for (var i = 1; i < matchResult.length; i++) {
