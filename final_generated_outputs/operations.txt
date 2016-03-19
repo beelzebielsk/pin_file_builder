@@ -1,23 +1,23 @@
 TO, LOCATION
-output[0], PIN_AE23
-output[1], PIN_AF23
-output[2], PIN_AB21
-output[3], PIN_AC22
-output[4], PIN_AD22
-output[5], PIN_AD23
-op0[0], PIN_N25
-op0[1], PIN_N26
-op0[2], PIN_P25
-op0[3], PIN_AE14
-op0[4], PIN_AF14
-op0[5], PIN_AD13
-op1[0], PIN_AC13
-op1[1], PIN_C13
-op1[2], PIN_B13
-op1[3], PIN_A13
-op1[4], PIN_N1
-op1[5], PIN_P1
-opcode[0], PIN_U4
-opcode[1], PIN_V1
-opcode[2], PIN_V2
-execute, PIN_G26
+output[0],PIN_AE23
+output[1],PIN_AF23
+output[2],PIN_AB21
+output[3],PIN_AC22
+output[4],PIN_AD22
+output[5],PIN_AD23
+op0[0],PIN_N25
+op0[1],PIN_N26
+op0[2],PIN_P25
+op0[3],PIN_AE14
+op0[4],PIN_AF14
+op0[5],PIN_AD13
+op1[0],PIN_AC13
+op1[1],PIN_C13
+op1[2],PIN_B13
+op1[3],PIN_A13
+op1[4],PIN_N1
+op1[5],PIN_P1
+opcode[0],PIN_U4
+opcode[1],PIN_V1
+opcode[2],PIN_V2
+execute,PIN_G26

@@ -1,5 +1,5 @@
 TO, LOCATION
-data_in, PIN_N25
-data_out, PIN_AE23
-SEL, PIN_V1
-WRT_EN, PIN_V2
+data_in,PIN_N25
+data_out,PIN_AE23
+SEL,PIN_V1
+WRT_EN,PIN_V2
