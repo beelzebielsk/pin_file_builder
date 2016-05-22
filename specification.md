@@ -6,13 +6,14 @@ If you've used it, you know that specifying the actual pin name for each signal 
 
 ## Features
 
-- You don't need to type the header for your pin assignment file. This will write it for you.
 - You can use the descriptive pin names that are written on the board, which are also listed in the pin assignment file.
 - You can specify assignments for *ranges* of signals and *ranges* of pins.
 - By altering the `pin_table.json` file, you can create more convenient names for pins.
 	- One such mapping is already provided for you: You can assign signals to more than one seven segment display at a time by using the descriptive name `HEX`, instead of `HEX0`, `HEX1` and so on. For examaple: 
 	- `HEX[0..6]` is the same as `HEX0[0..6]`
-	- `HEX[7..13]` is the same as `HEX1[0..6]`, et cetera.
+	- `HEX[7..13]` is the same as `HEX1[0..6]`,
+	- `HEX[14..20]` is the same as `HEX2[0..6]`, et cetera.
+- Writes the header for your pin file for you (TO, LOCATION).
 
 ### Example
 
@@ -74,8 +75,7 @@ Each shorthand line has the following form:
 
 	name[ index_specifier ], name[ index_specifier ]
 
-Where the name on the left is the name of a signal in a program and the name on the right is the descriptive name
-of a pin, or set of pins, such as `SW`, or `HEX0`.
+Where the name to the left of the main comma is a signal name, and the name on the right is a descriptive name of a pin, or set of pins such as `SW`, or `HEX0`, or `CLOCK_27`.
 
 Example:
 	
@@ -88,10 +88,10 @@ The result of the above shorthand line is to assign LEDR[0] to output[0], LEDR[1
 
 ## Index Specifiers
 
-An **index specifier** is a shorthand for a list of indices. `0..5` is a short way of saying `0,1,2,3,4,5`.
+An **index specifier** is a shorthand for a list of indices. For example, `0..5` is a short way of saying `0,1,2,3,4,5`.
 
 There are two major types of index specifiers: **explicit specifiers** and **implicit specifiers**.
-Plainly speaking, an explicit specifier is a specifier that gives enough information to go from a shorthand for a list of indices straight to the list of indices. `0..5` is explicit because I know that it includes every integer from in between 0 and 5 inclusive.
+Plainly speaking, an explicit specifier is a specifier that gives enough information to go from a shorthand for a list of indices straight to the list of indices. `0..5` is explicit because I know that it includes every integer in between 0 and 5 inclusive.
 
 An *implicit specifier* is a specifier that does not give enough information to go from a shorthand list to a full list. They require a little bit of context to understand what they mean. `..` is an example of an implicit specifier. The extra information needed for an implicit specifier is provided by an explicit specifier on the same line.
 
@@ -99,13 +99,14 @@ So the meaning of the example line is: Use indices `0,1,2,3,4,5` of the signal o
 
 ## Syntax Rules
 
-- Non-blank lines must contain at least one comma in order to separate the signal name from the pin name.
+- Non-blank lines must contain at least one comma in order to separate the signal name from the pin name. This comma should be after the end of the signal name (including an index for that signal, if it has one) and before the start of the pin name.
 - Blank lines are allowed.
 - Index specifiers must be placed in between square brackets.
-- An index specifier must match a known format of index specifier, which are listed below.
+- An index specifier must match a known format of index specifier, which are listed below in the two index specifiers section.
 - Both index specifiers must have the same length.
-	- There is no point in trying to make them have differing lengths since
-	we can't re-use old pins without overwriting assignemnts.
+	- There is no point in trying to make them have differing lengths since:
+		- For each signal name in the file, there has to be a pin assigned to it.
+		- If we tried to re-use pin/signal pairs, the last read pair takes effect over all previous pairs. New assignments overwrite old assignments.
 - For every line, at least one index specifier must be explicit.
 
 ## Explicit Index specifiers
@@ -131,12 +132,13 @@ These are index specifiers that can be immediately resolved. No extra informatio
 	- Specifiers a sequence of indices which are separated by a common difference, or step amount (an arithmetic progression). Sequence starts at 'start' and proceeds to the largest number of the form 'start + k\*step' that is less than or equal to 'end'.
 	In other words, A is a start, C is an end, and B is a step amount.
 	- Example : `2:3..10` -> `2,5,8`
+	- Example : `2:3..11` -> `2,5,8,11`
 - Step Range : 
 	- Format : `A:B:C`
 		- A: Start
 		- B: Step Amount
 		- C: Length Control
-	- Similar to 'Step to End' specifier. Specifies a sequence of indices that starts from the 'start', uses 'step' as a common difference. However, rather than proceeding while ti does not exceed an end, it creates a sequence with length 'length + 1' such that:
+	- Similar to 'Step to End' specifier. Specifies a sequence of indices that starts from the 'start', uses 'step' as a common difference. However, rather than proceeding while it does not exceed an end, it creates a sequence with length 'length + 1' such that:
 		- The first number is 'start'.
 		- The last number is 'start + length*step'.
 	- Example: `2:3:5` -> `2,5,8,11,14,17`
@@ -173,7 +175,7 @@ NOTE: Implicit index specifiers are not limited to 'TO' entries. They can also b
 - Length Forward : 
 	- Format : `A..# `
 		- A : Start
-		- # : A + length - 1
+		- \# : A + length - 1
 	- You can think of the '#' as being a placeholder forthe length of the explicit specifier index list. So this acts like a simple range, which starts atstart' and ends at 'start + length - 1'. Thelength - 1' is to ensure that both the explicit specifier and the implicit specifier are the same length. 
 	- Example:
 		```
@@ -249,7 +251,34 @@ NOTE: Implicit index specifiers are not limited to 'TO' entries. They can also b
 		Explicit Form : array[4,7,10,13,16,19] , SW[2,3,5,7,11,13]
 		```
 
+# How to extend this program
+
+## Where Specifers are Defined
+
+All specifier information is kept in `formats.js`. The information is split into two tables per specifier: a formats table and a resolution table. The formats table contains regular expression objects which both identify and parse specifiers, and the resolution table accepts a parsed expression (in the form of a Regular Expression object), reads the information from it, and produces an array which contains the indicies specified.
+
+## Adding New Specifiers
+
+If you would like to add new specifiers of your own to those presented here,
+then you must know the following:
+- Every specifier has a format in the formats table and a resolving function in
+	the resolution table.
+- For each specifier, the entries for that specifier in each table must have
+	the same key (name). So, for example, with the 'Explicit Simple Specifier',
+	there are two entries in the tables for explicit specifiers:
+	- explicitSpecifierFormats.simpleExplicit
+	- explicitResolution.simpleExplicit
+- The formats for each specifier are regular expressions.
+- Explicit and Implicit specifier information is kept separate. There are two
+	tables for each kind of specifier:
+	- Formats Table: A table of regular expressions which match and parse the
+	specifier.
+	- Resolution table: A table of functions which accept formats. In JavaScript,
+	regular expression objects have a state based on their last match.  They keep
+	track of captured groups, so they're basically parsed forms of the specifier.
+
 # Program Stuff
+
 
 ### Specifier Objects:
 
@@ -288,7 +317,36 @@ make your intent for assignment more clear.
 		infer this by checking to see that both index specifiers
 		are the same.
 
+# Coming Soon
 
+## Named Constants
+
+Place named constants in a pinfile preamble in the following form:
+
+	name=value
+
+The pinfile parser will scan for a preamble, create a list of these
+named constants, then replace each one with with the value that is
+associated with that name. After that, parsing will begin as
+normal.
+
+## Generating a .pinfile from VHDL source
+
+Create a separate program to read in a VHDL file and
+generate an incomplete pinfile for that VHDL source.
+This partial pinfile will have:
+- Named constants for every port signal that is a vector:
+	- name'left : The leftmost index of the vector.
+	- name'right : The rightmost index of the vector.
+	- name'length : The length of the vector, which is equal to
+	 - If vector declared using `downto`: name'left - name'right + 1.
+	 - If vector declared using `to`:  name'right - name'left + 1.
+- A list of all port signals. Makes it very easy to type out
+	the important parts of the pinfile.
+	- Signals that are vectors will be listed as such:
+		`vector_name[`
+	- Signals that are nt vectors will be listed as such:
+		`name, `
 # TODO
 
 - Fix documentation to reflect that lengthBackward implicit specifier actually counts backward, so that A..# produces A, A+1, .., whereas #..A produced A, A-1, ...

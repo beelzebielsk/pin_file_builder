@@ -37,8 +37,8 @@ code, textarea {
 	</style>
 	<script src="./web_version.js">
 	</script>
-	<script src="webpage/jquery-2.2.2.min.js">
-	</script>
+  <script src="http://code.jquery.com/jquery-2.2.2.js" integrity="sha256-4/zUCqiq0kqxhZIyp4G0Gk+AOtCJsY1TA00k5ClsZYE=" crossorigin="anonymous"></script>
+
 	<script>
 
 function unfold() {
@@ -54,6 +54,8 @@ function unfold() {
 		errors.text("");
 	} catch (e) { 
 		errors.text( e.message );
+		bw.text("");
+		result.text("");
 	}
 }
 
@@ -215,9 +217,13 @@ $(document).ready(function() {
 				<textarea class=source>
 					signal[0..6], HEX0[..]
 
-					signal[7..13], HEX1[..]
-
 					signal[7..13], HEX1[0..#]
+
+					signal[14..20], HEX2[0..#]
+
+					signal[21..27], HEX3[0..#]
+
+					signal[0..27], HEX[..]
 				</textarea>
 				<div class=bw>
 					<p class=sectionHeader> Intermediate Result </p>
@@ -236,7 +242,6 @@ $(document).ready(function() {
 				</div>
 			</div>
 		</div>
-
 
 	<h1> Real Example </h1>
 	<p>
@@ -284,8 +289,5 @@ $(document).ready(function() {
 			</div>
 		</div>
 	</div>
-
-
-
 	</body>
 </html>

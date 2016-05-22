@@ -8,6 +8,42 @@
 // in one place helps to keep the names
 // consistent.
 
+
+//////////////////////////////////////////////////
+// Adding New Formats : {{{
+//////////////////////////////////////////////////
+//
+// If you would like to add new specifiers of your own
+// to those presented here, then you must know the
+// following:
+// - Every specifier has a format in the formats
+//	table and a resolving function in the
+//	resolution table.
+// - For each specifier, the entries for that
+//	specifier in each table must have the same
+//	key (name). So, for example, with the
+//	'Explicit Simple Specifier', there are two
+//	entries in the tables for explicit
+//	specifiers:
+//		- explicitSpecifierFormats.simpleExplicit
+//		- explicitResolution.simpleExplicit
+// - The formats for each specifier are regular
+//	expressions.
+// - Explicit and Implicit specifier information is
+//	kept separate. There are two tables for each
+//	kind of specifier:
+//		- Formats Table: A table of regular expressions
+//			which match and parse the specifier.
+//		- Resolution table: A table of functions which
+//			accept formats. In JavaScript, regular expression
+//			objects have a state based on their last match.
+//			They keep track of captured groups, so they're
+//			basically parsed forms of the specifier.
+//
+//////////////////////////////////////////////////
+// }}}
+//////////////////////////////////////////////////
+
 var validation = {};
 var explicitSpecifierFormats = {};
 var implicitSpecifierFormats = {};
@@ -15,7 +51,7 @@ var explicitResolution = {};
 var implicitResolution = {};
 
 // ****************************************
-// Common Regular Expression Pieces
+// Common Regular Expression Pieces {{{
 // ****************************************
 
 validation.lineExpression = 
@@ -28,7 +64,11 @@ validation.number = "\\d+";
 validation.numberCap = "(" + validation.number + ")";
 
 // ****************************************
-// Explicit Specifiers
+// }}}
+// ****************************************
+
+// ****************************************
+// Explicit Specifiers {{{
 // ****************************************
 
 // Specifier Name: Simple Explicit
@@ -114,14 +154,17 @@ explicitResolution.stepRange =
 		specifier.content = [start];
 		var multiplier = +specifier.match[2];
 		var length = +specifier.match[3];
-		for (var i = 1; i <= length; i++){
+		for (var i = 1; i < length; i++){
 			specifier.content.push( start + multiplier*i );
 		}
 	};
 
+// ****************************************
+// }}}
+// ****************************************
 
 // ****************************************
-// Implicit Specifiers
+// Implicit Specifiers {{{
 // ****************************************
 
 // Specifier Name: Range Reuse
@@ -230,6 +273,10 @@ implicitResolution.stepRangeLengthReuse =
 		}
 		implicitSpec.length = implicitSpec.content.length;
 	};
+
+// ****************************************
+// }}}
+// ****************************************
 
 module.exports = {
 	validation               : validation,

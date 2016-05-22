@@ -23,7 +23,8 @@ var implicitSpecifierFormats =
 //		explicitResolutionTable[name]
 // Will turn an explicit index specifier of the format 'name' into a 
 // simple explicit specifier.
-var explicitResolutionTable = require("./formats.js").explicitResolution;
+var explicitResolutionTable =
+	require("./formats.js").explicitResolution;
 
 // This is an associative array of functions, each of
 // which take a single argument: an implicit index specifier.
@@ -31,7 +32,8 @@ var explicitResolutionTable = require("./formats.js").explicitResolution;
 //		implicitResolutionTable[name]
 // Will turn an implicit index specifier of the format 'name' into an 
 // explicit specifier.
-var implicitResolutionTable = require("./formats.js").implicitResolution;
+var implicitResolutionTable =
+	require("./formats.js").implicitResolution;
 
 // ****************************************
 // INPUT/OUTPUT

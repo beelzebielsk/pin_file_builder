@@ -16,7 +16,6 @@ var fileContent = "";
 input.on('data', (chunk) => { fileContent += chunk; } );
 input.on('end', () => replace(fileContent) );
 
-
 function replace(fileContent) {
 	var lines = fileContent.trim().split('\n');
 	var lineNumber = 1;
