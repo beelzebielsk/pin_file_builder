@@ -4,11 +4,18 @@ var blankLine = require("./formats.js").validation.blankLine;
 var pinTable = require("./pin_table.json");
 var fs = require("fs");
 
+// Get arguments: input file, output file:
+//	-- If no arguments, then use std_in for input and std_out for output 
+//  -- If one argument, then use argument as file name for std_out for output.
+//	-- if two arugments, then use first arg as input file name and second arg as output file name.
+var getInputOutput = require('./getInputOutput.js');
+var input;
+var output;
+[input, output] = getInputOutput(true, true, 2, 3);
+
 // Set up input and output to and from program.
 // TODO: Give option to take input from and write input to
 // specified files.
-var input = process.stdin;
-var output = process.stdout;
 output.write("TO, LOCATION\n");
 
 // Get the and file to run replacer on.

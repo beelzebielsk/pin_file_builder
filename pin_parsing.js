@@ -43,19 +43,10 @@ var implicitResolutionTable =
 //	-- If no arguments, then use std_in for input and std_out for output 
 //  -- If one argument, then use argument as file name for std_out for output.
 //	-- if two arugments, then use first arg as input file name and second arg as output file name.
-var inputFile;
-var outputFile;
-var input = process.stdin;
-var output = process.stdout;
-if (process.argv[3]){
-	outputFile = process.argv[3];
-	output = fs.createWriteStream(outputFile);
-}
-if (process.argv[2]){
-	inputFile = process.argv[2];
-	input = fs.createReadStream(inputFile);
-}
-	
+var getInputOutput = require('./getInputOutput.js');
+var input;
+var output; [input, output] = getInputOutput(true, true, 2, 3);
+
 // Gather all text from input into one string. Will be split by newlines.
 var fileContent = "";
 input.on('data', (chunk) => { fileContent += chunk; } )

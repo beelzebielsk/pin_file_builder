@@ -1,15 +1,23 @@
 # Use
 
-This is a program for quickly creating pin assignment files for use with the Altera DE-2 board and Quartus II's FPGA programming software.
+This is a program for quickly creating pin assignment files for use
+with the Altera DE-2 board and Quartus II's FPGA programming software.
 
-If you've used it, you know that specifying the actual pin name for each signal in a file seems like it should be a much easier task.
+If you've used it, you know that specifying the actual pin name for
+each signal in a file seems like it should be a much easier task.
 
 ## Features
 
-- You can use the descriptive pin names that are written on the board, which are also listed in the pin assignment file.
-- You can specify assignments for *ranges* of signals and *ranges* of pins.
-- By altering the `pin_table.json` file, you can create more convenient names for pins.
-	- One such mapping is already provided for you: You can assign signals to more than one seven segment display at a time by using the descriptive name `HEX`, instead of `HEX0`, `HEX1` and so on. For examaple: 
+- You can use the descriptive pin names that are written on the board,
+	which are also listed in the pin assignment file.
+- You can specify assignments for *ranges* of signals and *ranges* of
+	pins.
+- By altering the `pin_table.json` file, you can create more
+	convenient names for pins.
+	- One such mapping is already provided for you: You can assign
+		signals to more than one seven segment display at a time by using
+		the descriptive name `HEX`, instead of `HEX0`, `HEX1` and so on.
+		For examaple: 
 	- `HEX[0..6]` is the same as `HEX0[0..6]`
 	- `HEX[7..13]` is the same as `HEX1[0..6]`,
 	- `HEX[14..20]` is the same as `HEX2[0..6]`, et cetera.
@@ -48,6 +56,7 @@ execute, PIN_G26
 That's quite long! You can shorten all of that to:
 
 **Shorthand pin assignment file:**
+
 ```
 output[0..5], LEDR[..]
 op0[0..5], SW[..]
@@ -61,6 +70,7 @@ The latter is easier to maintain, since you can change a lot of assignments quic
 ## How to use
 
 There are two major programs here:
+
 - **pin\_parser.js**, which transforms a file that's in the descriptive shorthand demonstrated above and unwraps it such that there's only one index in between each set of square braces.
 	- Use: 
 		- `node pin_parser.js` : Will take its input from stadard input and write to standard output.
@@ -84,7 +94,7 @@ Example:
 	{ output } [ {       0..5      } ], { LEDR } [ {        ..       } ]
 	{  name  }   { index_specifier }    { name }   { index_specifier }
 
-The result of the above shorthand line is to assign LEDR[0] to output[0], LEDR[1] to output[1] and so on.
+The result of the above shorthand line is to assign `LEDR[0]` to `output[0]`, `LEDR[1]` to `output[1]` and so on.
 
 ## Index Specifiers
 
@@ -103,11 +113,11 @@ So the meaning of the example line is: Use indices `0,1,2,3,4,5` of the signal o
 - Blank lines are allowed.
 - Index specifiers must be placed in between square brackets.
 - An index specifier must match a known format of index specifier, which are listed below in the two index specifiers section.
+- For every line, at least one index specifier must be explicit.
 - Both index specifiers must have the same length.
 	- There is no point in trying to make them have differing lengths since:
 		- For each signal name in the file, there has to be a pin assigned to it.
-		- If we tried to re-use pin/signal pairs, the last read pair takes effect over all previous pairs. New assignments overwrite old assignments.
-- For every line, at least one index specifier must be explicit.
+		- New assignments overwrite old assignments.
 
 ## Explicit Index specifiers
 
@@ -129,7 +139,7 @@ These are index specifiers that can be immediately resolved. No extra informatio
 		- A: Start
 		- B: Step Amount
 		- C: End
-	- Specifiers a sequence of indices which are separated by a common difference, or step amount (an arithmetic progression). Sequence starts at 'start' and proceeds to the largest number of the form 'start + k\*step' that is less than or equal to 'end'.
+	- Specifiers a sequence of indices which are separated by a common difference, or step amount (an arithmetic progression). Sequence starts at `start` and proceeds to the largest number of the form $\text{start} + k \cdot \text{step}$ that is less than or equal to `end`.
 	In other words, A is a start, C is an end, and B is a step amount.
 	- Example : `2:3..10` -> `2,5,8`
 	- Example : `2:3..11` -> `2,5,8,11`
@@ -138,10 +148,10 @@ These are index specifiers that can be immediately resolved. No extra informatio
 		- A: Start
 		- B: Step Amount
 		- C: Length Control
-	- Similar to 'Step to End' specifier. Specifies a sequence of indices that starts from the 'start', uses 'step' as a common difference. However, rather than proceeding while it does not exceed an end, it creates a sequence with length 'length + 1' such that:
-		- The first number is 'start'.
-		- The last number is 'start + length*step'.
-	- Example: `2:3:5` -> `2,5,8,11,14,17`
+	- Similar to *Step to End* specifier. Specifies a sequence of indices that starts from the *start*, uses *step* as a common difference. However, rather than proceeding while it does not exceed an end, it creates a sequence with length $length$ such that:
+		- The first number is *start*.
+		- The last number is $\text{start} + (\text{length} - 1) \cdot \text{step}$.
+	- Example: `2:3:5` -> `2,5,8,11,14`
 
 ## Implicit Index Specifiers
 
@@ -149,9 +159,7 @@ These index specifiers omit some information about which indices to specify. Sin
 
 This means that there must be at least one explciit index specifier on every line.
 
-```
-NOTE: Implicit index specifiers are not limited to 'TO' entries. They can also be used in 'LOCATION' entries.
-```
+> NOTE: Implicit index specifiers are not limited to 'TO' entries. They can also be used in 'LOCATION' entries.
 
 - Range Reuse:
 	- Format : `..`
@@ -159,64 +167,68 @@ NOTE: Implicit index specifiers are not limited to 'TO' entries. They can also b
 	- Example: 
 		```
 		Implicit Form : Array[..]   , SW[0..5]
-
 		Explicit Form : Array[0..5] , SW[0..5]
 		```
 - Offset Range Reuse: 
 	- Format : `A.. `
-		- A: Offset
-	- Reuses the indices specifies by the explicit specifier, but adds a common offset to all of them.
+		- `A`: Offset
+	- Reuses the indices specifies by the explicit specifier, but adds a
+		common offset to all of them, where the offset is specified by the
+		number provided.
 	- Example:
 		```
 		Implicit Form : array[2..]  , SW[1..6]
-
 		Explicit Form : array[3..8] , SW[1..6]
 		```
 - Length Forward : 
 	- Format : `A..# `
-		- A : Start
-		- \# : A + length - 1
-	- You can think of the '#' as being a placeholder forthe length of the explicit specifier index list. So this acts like a simple range, which starts atstart' and ends at 'start + length - 1'. Thelength - 1' is to ensure that both the explicit specifier and the implicit specifier are the same length. 
+		- `A` : Start
+		- \# : $\texttt{A} + \texttt{length} - 1$
+	- You can think of the `#` as being a placeholder forthe length of
+		the explicit specifier index list. So this acts like a simple
+		range, which starts at start and ends at $\text{start} +
+		\text{length} - 1$. The $ \text{length} - 1$ is to ensure that
+		both the explicit specifier and the implicit specifier are the
+		same length. 
 	- Example:
 		```
 		Implicit Form : array[5..#], SW[1..6]
-
 		Explicit Form : array[5..10], SW[1..6]
 		```
 	- Example:
 		```
 		Implicit Form : array[5..#], SW[0:2..10]
-
 		Explicit Form : array[5..10], SW[0:2..10]
 		```
 	- Exmaple:
 		```
 		Implicit Form : array[5..#], SW[2,3,5,7,11]
-
 		Explicit Form : array[5..9], SW[2,3,5,7,11]
 		```
 
 - Length Backward 
 	- Format : `#..A `
-		- # : A - (length - 1)
+		- \# : $\texttt{A} - (\texttt{length} - 1)$
 		- A : End
-	- You can think of the '#' as being a placeholder for the length of the explicit specifier index list. So this acts like a simple range, but reversed. It starts at 'end' and proceeds backward toend - length + 1'. The 'length+1' is there to ensure that the explicit specifier and the implicit specifier are the same length.
+	- You can think of the `#` as being a placeholder for the length of
+		the explicit specifier index list. So this acts like a simple
+		range, but reversed. It starts at `end` and proceeds backward to $
+		\text{end} - \text{length} + 1$. The $\text{length}+1$ is there to
+		ensure that the explicit specifier and the implicit specifier are
+		the same length.
 	- Example:
 		```
 		Implicit Form : array[#..8], SW[1..6]
-
 		Explicit Form : array[3..8], SW[1..6]
 		```
 	- Example:
 		```
 		Implicit Form : array[#..8], SW[0:2..10]
-
 		Explicit Form : array[3..8], SW[0:2..10]
 		```
 	- Exmaple:
 		```
 		Implicit Form : array[#..8], SW[2,3,5,7,11]
-
 		Explicit Form : array[4..8], SW[2,3,5,7,11]
 		```
 
@@ -224,30 +236,28 @@ NOTE: Implicit index specifiers are not limited to 'TO' entries. They can also b
 	- Format : `A:B:#`
 		- A : Start
 		- B : Step
-		- # : length - 1
-	- You can think of the '#' as a placeholder for the length of an explicit specifier. So the index list produced by this specifieris exactly like the step range explicit specifier, with the 'length' parameter replaced by the length of the explicit specifier, minus 1.
+		- \# : length - 1
+	- You can think of the '#' as a placeholder for the length of an
+		explicit specifier. So the index list produced by this specifier
+		is exactly like the step range explicit specifier, with the
+		'length' parameter replaced by the length of the explicit
+		specifier, minus 1.
 	- Example:
 		```
 		Implicit Form : array[0:2:#]     , SW[0..5]
-
 		Explicit Form : array[0:2:4]     , SW[0..5]
-
 		Explicit Form : array[0,2,4,6,8] , SW[0..5]
 		```
 	- Example:
 		```
 		Implicit Form : array[1:2:#]   , SW[0:3..10]
-
 		Explicit Form : array[1:2:3]   , SW[0:3..10]
-
 		Explicit Form : array[1,3,5,7] , SW[0:3..10]
 		```
 	- Exmaple:
 		```
 		Implicit Form : array[4:3:#]           , SW[2,3,5,7,11,13]
-
 		Explicit Form : array[4:3:5]           , SW[2,3,5,7,11,13]
-
 		Explicit Form : array[4,7,10,13,16,19] , SW[2,3,5,7,11,13]
 		```
 
@@ -255,19 +265,49 @@ NOTE: Implicit index specifiers are not limited to 'TO' entries. They can also b
 
 ## Where Specifers are Defined
 
-All specifier information is kept in `formats.js`. The information is split into two tables per specifier: a formats table and a resolution table. The formats table contains regular expression objects which both identify and parse specifiers, and the resolution table accepts a parsed expression (in the form of a Regular Expression object), reads the information from it, and produces an array which contains the indicies specified.
+All specifier information is kept in `formats.js`. The information is split
+into two tables per specifier: a *formats* table and a *resolution* table. 
+
+### Formats Table
+
+The formats table contains regular expression objects which both
+identify and parse specifiers. These regular expressions are arguments
+to the functions that are specified in the resolution table. 
+
+### Resolution Table
+
+The resolution table accepts arguments of the `specifier` type. These
+objects have the following properties:
+
+- content : The completely resolved array of indices.
+- text    : The actual specifier.
+- Type    : Implicit/Explicit (either `'e'` or `'i'`)
+- Name    : specifier name, such as `simpleExplicit`
+- match   : the return value of a regular expression match. To see
+	properties of the return value of a match, see [this
+	reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match)
+- Length  : The length of the completely resolved array of indices.
+	This is useful for resolving implicit specifiers.
+
+The resolution table accepts a parsed expression in the form of a
+Javascript Regular Expression object. It reads the information out of
+this object my referencing the captured matches from the regular
+expression, then these functions produce arrays which hold all of the
+indicies that are specified by the index specifier, and in the order
+that they're intended to be specified. 
 
 ## Adding New Specifiers
 
 If you would like to add new specifiers of your own to those presented here,
 then you must know the following:
+
 - Every specifier has a format in the formats table and a resolving function in
 	the resolution table.
 - For each specifier, the entries for that specifier in each table must have
 	the same key (name). So, for example, with the 'Explicit Simple Specifier',
 	there are two entries in the tables for explicit specifiers:
-	- explicitSpecifierFormats.simpleExplicit
-	- explicitResolution.simpleExplicit
+	- `explicitSpecifierFormats.simpleExplicit`
+	- `explicitResolution.simpleExplicit`
 - The formats for each specifier are regular expressions.
 - Explicit and Implicit specifier information is kept separate. There are two
 	tables for each kind of specifier:
@@ -283,6 +323,7 @@ then you must know the following:
 ### Specifier Objects:
 
 The have the following properties:
+
 - content : The completely resolved array of indices.
 - text : The actual specifier.
 - Type : Implicit/Explicit (either 'e' or 'i')
