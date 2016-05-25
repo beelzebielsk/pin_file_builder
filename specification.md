@@ -1,3 +1,10 @@
+
+---
+title: Pinfile Builder Documentation
+author: Adam Ibrahim
+header-includes:
+	- \usepackage{tcolorbox}
+---
 # Use
 
 This is a program for quickly creating pin assignment files for use
@@ -183,7 +190,9 @@ These index specifiers omit some information about which indices to specify. Sin
 
 This means that there must be at least one explciit index specifier on every line.
 
-> NOTE: Implicit index specifiers are not limited to 'TO' entries. They can also be used in 'LOCATION' entries.
+\begin{tcolorbox}[title=NOTE]
+Implicit index specifiers are not limited to 'TO' entries. They can also be used in 'LOCATION' entries.
+\end{tcolorbox}
 
 - Range Reuse:
 	- Format : `..`
