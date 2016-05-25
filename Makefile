@@ -12,8 +12,8 @@ basicEngine = pdflatex
 fancyEngine = lualatex
 
 
-doc : README.md
+doc : specification.md
 	pandoc -o $(docDir)/$(basename $<).pdf $< --latex-engine=$(basicEngine) $(variables)
 
-fancyDoc : README.md
+fancyDoc : specification.md
 	pandoc -o $(docDir)/$(basename $<).pdf $< --latex-engine=$(fancyEngine) $(variables) $(fancyVariables)

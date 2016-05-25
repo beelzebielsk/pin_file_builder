@@ -171,24 +171,25 @@ These are index specifiers that can be immediately resolved. No extra informatio
 	- Example : `2,3,5,7,11,13`.
 - Simple Range :
 	- Format : `A..B`
-		- A: Start
-		- B: End
-	- Specifies an inclusive range of consecutive integers. Begins with 'A' and ends with 'B'.
+		- `A`: Start
+		- `B`: End
+	- Specifies an inclusive range of consecutive integers. Begins with `A` and ends with `B`. Can count both backward and forward, depending on whether the `start` is larger than or smaller than `end`.
 	- Example :  `3..5` -> `3,4,5`
+	- Example :  `5..3` -> `5,4,3`
 - Step To End :
 	- Format : `A:B..C`
-		- A: Start
-		- B: Step Amount
-		- C: End
+		- `A`: Start
+		- `B`: Step Amount
+		- `C`: End
 	- Specifiers a sequence of indices which are separated by a common difference, or step amount (an arithmetic progression). Sequence starts at `start` and proceeds to the largest number of the form $\text{start} + k \cdot \text{step}$ that is less than or equal to `end`.
 	In other words, A is a start, C is an end, and B is a step amount.
 	- Example : `2:3..10` -> `2,5,8`
 	- Example : `2:3..11` -> `2,5,8,11`
 - Step Range : 
 	- Format : `A:B:C`
-		- A: Start
-		- B: Step Amount
-		- C: Length Control
+		- `A`: Start
+		- `B`: Step Amount
+		- `C`: Length Control
 	- Similar to *Step to End* specifier. Specifies a sequence of indices that starts from the *start*, uses *step* as a common difference. However, rather than proceeding while it does not exceed an end, it creates a sequence with length $length$ such that:
 		- The first number is *start*.
 		- The last number is $\text{start} + (\text{length} - 1) \cdot \text{step}$.
@@ -241,7 +242,7 @@ entries. But they may never be used as both.
 	- You can think of the `#` as being a placeholder forthe length of
 		the explicit specifier index list. So this acts like a simple
 		range, which starts at start and ends at $\text{start} +
-		\text{length} - 1$. The $ \text{length} - 1$ is to ensure that
+		\text{length} - 1$. The $\text{length} - 1$ is to ensure that
 		both the explicit specifier and the implicit specifier are the
 		same length. 
 	- Example:
@@ -266,14 +267,15 @@ entries. But they may never be used as both.
 		- A : End
 	- You can think of the `#` as being a placeholder for the length of
 		the explicit specifier index list. So this acts like a simple
-		range, but reversed. It starts at `end` and proceeds backward to $
-		\text{end} - \text{length} + 1$. The $\text{length}+1$ is there to
+		range, but reversed. It starts at `end` and proceeds backward to 
+		$\text{end} - \text{length} + 1$. The $\text{length}+1$ is there to
 		ensure that the explicit specifier and the implicit specifier are
 		the same length.
 	- Example:
 		```
 		Implicit Form : array[#..8], SW[1..6]
-		Explicit Form : array[3..8], SW[1..6]
+		Explicit Form : array[8..3], SW[1..6]
+		Explicit Form : array[8,7,6,5,4,3], SW[1,2,3,4,5,6]
 		```
 	- Example:
 		```
