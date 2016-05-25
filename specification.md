@@ -6,6 +6,11 @@ with the Altera DE-2 board and Quartus II's FPGA programming software.
 If you've used it, you know that specifying the actual pin name for
 each signal in a file seems like it should be a much easier task.
 
+# First Steps
+
+In order to use this the javascript programs, you must install
+[node.js](https://nodejs.org/en/download/).
+
 ## Features
 
 - You can use the descriptive pin names that are written on the board,
@@ -67,16 +72,31 @@ execute, KEY[0]
 
 The latter is easier to maintain, since you can change a lot of assignments quickly. It's also more descriptive. You can come back to an older project and know what to expect when you put your program on a board.
 
-## How to use
+## How to Invoke
 
-There are two major programs here:
+There are two major programs here, and a front-end written in
+javascript for using these programs.
 
-- **pin\_parser.js**, which transforms a file that's in the descriptive shorthand demonstrated above and unwraps it such that there's only one index in between each set of square braces.
+- **`pinfileBuilder.js`** : This is the front-end. It will take it's
+	input and return a full pin file which can be used with Quartus.
+	Takes input from either standard input, or a file which is specified
+	as an argument, then outputs to either standard output, or a file
+	which is specified as an argument.
+	- Use:
+		- `node pinfileBuilder.js` : Will take it's input from standard
+			input and write to standard output.
+		- `node pinfileBuilder.js path/to/inputFile ` :  Will take it's
+			input from the input file specified, and output to standard
+			output.
+		- `node pinfileBuilder.js path/to/inputFile path/to/outputFile` :
+			Will take it's input from the input file specified, and write
+			it's output to the output file specified.
+- **`pin_parser.js`**, which transforms a file that's in the descriptive shorthand demonstrated above and unwraps it such that there's only one index in between each set of square braces.
 	- Use: 
 		- `node pin_parser.js` : Will take its input from stadard input and write to standard output.
 		- `node pin_parser.js path/to/inputFile` : Will take its input from `inputFile` and write output to standard output.
 		- `node pin_parser.js path/to/inputFile path/to/outputFile` : Will take its input from `inputFile` and write output to `outputFile`.
-- **replacer.js**, which takes an unwrapped shorthand file and translates it into a file of actual pin names.
+- **`replacer.js`**, which takes an unwrapped shorthand file and translates it into a file of actual pin names.
 	- Use: `node replacer.js` : Will take its input from standard input and write to standard output.
 
 # Specification of Shorthand
@@ -109,7 +129,7 @@ So the meaning of the example line is: Use indices `0,1,2,3,4,5` of the signal o
 
 ## Syntax Rules
 
-- Non-blank lines must contain at least one comma in order to separate the signal name from the pin name. This comma should be after the end of the signal name (including an index for that signal, if it has one) and before the start of the pin name.
+- Non-blank lines must contain *at least one comma* in order to separate the signal name from the pin name. This comma should be after the end of the signal name (including an index for that signal, if it has one) and before the start of the pin name.
 - Blank lines are allowed.
 - Index specifiers must be placed in between square brackets.
 - An index specifier must match a known format of index specifier, which are listed below in the two index specifiers section.
@@ -119,9 +139,13 @@ So the meaning of the example line is: Use indices `0,1,2,3,4,5` of the signal o
 		- For each signal name in the file, there has to be a pin assigned to it.
 		- New assignments overwrite old assignments.
 
+### Reading Error Messages
+
+If any of these rules are broken, the program should give you an error. Error detection is still a work in progress, though. 
+
 ## Explicit Index specifiers
 
-These are index specifiers that can be immediately resolved. No extra information is necessary to figure out the indices that are specified.
+These are index specifiers that can be immediately resolved. No extra information is necessary to figure out the indices that are specified. The program cannot yet give you accurate information about where the error occurred, and it does not catch every error.
 
 - Simple Explicit specifier :
 	- Format : `A,B,C,..`
@@ -279,13 +303,15 @@ to the functions that are specified in the resolution table.
 The resolution table accepts arguments of the `specifier` type. These
 objects have the following properties:
 
-- content : The completely resolved array of indices.
-- text    : The actual specifier.
-- Type    : Implicit/Explicit (either `'e'` or `'i'`)
-- Name    : specifier name, such as `simpleExplicit`
-- match   : the return value of a regular expression match. To see
+- content : Type `Array`. The completely resolved array of indices.
+- text    : Type `string`. The actual specifier.
+- Type    : Type `string`. Implicit/Explicit (either `'e'` or `'i'`)
+- Name    : TYpe `string`. specifier name, such as `simpleExplicit`
+- match   : Type `Array`. The return value of a regular expression match. To see
 	properties of the return value of a match, see [this
-	reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match)
+	reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match).
+	For examples, you can look at the existing resolution function
+	definitions.
 - Length  : The length of the completely resolved array of indices.
 	This is useful for resolving implicit specifiers.
 

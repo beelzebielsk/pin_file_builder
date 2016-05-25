@@ -1,9 +1,9 @@
+
+// ****************************************
+// PREAMBLE : {{{
+// ****************************************
+
 "use strict"
-
-// ****************************************
-// PREAMBLE
-// ****************************************
-
 var fs = require('fs');
 var stream = require('stream');
 
@@ -36,7 +36,11 @@ var implicitResolutionTable =
 	require("./formats.js").implicitResolution;
 
 // ****************************************
-// INPUT/OUTPUT
+// }}}
+// ****************************************
+
+// ****************************************
+// INPUT/OUTPUT : {{{
 // ****************************************
 
 // Get arguments: input file, output file:
@@ -53,7 +57,11 @@ input.on('data', (chunk) => { fileContent += chunk; } )
 input.on('end', () => { processFile(fileContent); } );
 
 // ****************************************
-// PARSING
+// }}}
+// ****************************************
+
+// ****************************************
+// PARSING : {{{
 // ****************************************
 
 function processFile(fileContents){
@@ -82,6 +90,14 @@ function processFile(fileContents){
 		lineNumber++;
 	}
 };
+
+// ****************************************
+// }}}
+// ****************************************
+
+// ****************************************
+// UTILITY FUNCTIONS : {{{
+// ****************************************
 
 function processLine(line){
 	// Match line to one of valid line possibilities. So far
@@ -226,3 +242,8 @@ function printResult(name0, spec0, name1, spec1, output){
 		output.write(outputStr);
 	}
 }
+
+// ****************************************
+// }}}
+// ****************************************
+

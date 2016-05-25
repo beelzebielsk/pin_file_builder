@@ -1,8 +1,20 @@
+//////////////////////////////////////////////////
+// Preamble : {{{
+//////////////////////////////////////////////////
+
 "use strict"
 var basicLine = require("./formats.js").validation.afterParseLine;
 var blankLine = require("./formats.js").validation.blankLine;
 var pinTable = require("./pin_table.json");
 var fs = require("fs");
+
+//////////////////////////////////////////////////
+// }}}
+//////////////////////////////////////////////////
+
+//////////////////////////////////////////////////
+// Fetching Input : {{{
+//////////////////////////////////////////////////
 
 // Get arguments: input file, output file:
 //	-- If no arguments, then use std_in for input and std_out for output 
@@ -13,6 +25,14 @@ var input;
 var output;
 [input, output] = getInputOutput(true, true, 2, 3);
 
+//////////////////////////////////////////////////
+// }}}
+//////////////////////////////////////////////////
+
+//////////////////////////////////////////////////
+// Setting up the Output : {{{
+//////////////////////////////////////////////////
+
 // Set up input and output to and from program.
 // TODO: Give option to take input from and write input to
 // specified files.
@@ -22,6 +42,10 @@ output.write("TO, LOCATION\n");
 var fileContent = "";
 input.on('data', (chunk) => { fileContent += chunk; } );
 input.on('end', () => replace(fileContent) );
+
+//////////////////////////////////////////////////
+// }}}
+//////////////////////////////////////////////////
 
 function replace(fileContent) {
 	var lines = fileContent.trim().split('\n');
