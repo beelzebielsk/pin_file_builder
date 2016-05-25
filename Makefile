@@ -2,7 +2,7 @@ docDir = fancyDocumentation
 values = \
 				 geometry='margin=1in' \
 				 linkcolor='black' \
-				 urlcolor='Mulberry' \
+				 urlcolor='Mulberry'
 fancyValues = \
 				 mainfont='heuristica' \
 				 monofont='SourceCodePro'

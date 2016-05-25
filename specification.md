@@ -3,9 +3,11 @@
 title: Pinfile Builder Documentation
 author: Adam Ibrahim
 header-includes:
+	- \usepackage[dvipsnames]{xcolor}
 	- \usepackage{tcolorbox}
 ---
-# Use
+
+# Purpose
 
 This is a program for quickly creating pin assignment files for use
 with the Altera DE-2 board and Quartus II's FPGA programming software.
@@ -15,8 +17,9 @@ each signal in a file seems like it should be a much easier task.
 
 # First Steps
 
-In order to use this the javascript programs, you must install
-[node.js](https://nodejs.org/en/download/).
+In order to run the javascript scripts, you must install
+[node.js](https://nodejs.org/en/download/) for your platform. It's
+available for Windows, Mac, and Linux.
 
 ## Features
 
@@ -79,7 +82,7 @@ execute, KEY[0]
 
 The latter is easier to maintain, since you can change a lot of assignments quickly. It's also more descriptive. You can come back to an older project and know what to expect when you put your program on a board.
 
-## How to Invoke
+## How to Use
 
 There are two major programs here, and a front-end written in
 javascript for using these programs.
@@ -148,7 +151,14 @@ So the meaning of the example line is: Use indices `0,1,2,3,4,5` of the signal o
 
 ### Reading Error Messages
 
-If any of these rules are broken, the program should give you an error. Error detection is still a work in progress, though. 
+If any of these rules are broken, the program won't work correctly. It
+should give you an error, but error messages are a work in progress.
+Their format is currently fluid. However, when possible, a line number
+will be provided. Be wary of error messages that occur during the pin
+name replacement stage. These use line numbers from the intermediate
+form of a pinfile, where each index specifier has been unwrapped.
+While it's not impossible to figure out which specifier caused a
+problem, the output that's given may be misleading.
 
 ## Explicit Index specifiers
 
@@ -191,7 +201,8 @@ These index specifiers omit some information about which indices to specify. Sin
 This means that there must be at least one explciit index specifier on every line.
 
 \begin{tcolorbox}[title=NOTE]
-Implicit index specifiers are not limited to 'TO' entries. They can also be used in 'LOCATION' entries.
+Implicit index specifiers can be used as either 'TO' or 'LOCATION'
+entries. But they may never be used as both.
 \end{tcolorbox}
 
 - Range Reuse:
@@ -202,6 +213,11 @@ Implicit index specifiers are not limited to 'TO' entries. They can also be used
 		Implicit Form : Array[..]   , SW[0..5]
 		Explicit Form : Array[0..5] , SW[0..5]
 		```
+	- Example:
+	```
+		Implicit Form: array[0..7], SW[..]
+		Explicit Form: array[0..7], SW[0..5]
+	```
 - Offset Range Reuse: 
 	- Format : `A.. `
 		- `A`: Offset
@@ -212,6 +228,11 @@ Implicit index specifiers are not limited to 'TO' entries. They can also be used
 		```
 		Implicit Form : array[2..]  , SW[1..6]
 		Explicit Form : array[3..8] , SW[1..6]
+		```
+	- Example:
+		```
+		Implicit Form : array[0..6], SW[4..]
+		Explicit Form : array[0..6], SW[4..10]
 		```
 - Length Forward : 
 	- Format : `A..# `
@@ -313,9 +334,16 @@ The resolution table accepts arguments of the `specifier` type. These
 objects have the following properties:
 
 - content : Type `Array`. The completely resolved array of indices.
-- text    : Type `string`. The actual specifier.
+	The final list of indices gets placed in this array. If you are
+	creating an implicit specifier, and you want to look at the list of
+	indices from an explicit specifer, then you can use this property of
+	the `specifier` object to see that information.
+- text    : Type `string`. The actual specifier as it was typed in the
+	pinfile.
 - Type    : Type `string`. Implicit/Explicit (either `'e'` or `'i'`)
-- Name    : TYpe `string`. specifier name, such as `simpleExplicit`
+- Name    : TYpe `string`. Specifier name, such as `simpleExplicit`.
+	This is the name that's used as a key in the *formats* and
+	*resolution* tables.
 - match   : Type `Array`. The return value of a regular expression match. To see
 	properties of the return value of a match, see [this
 	reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match).
@@ -324,12 +352,18 @@ objects have the following properties:
 - Length  : The length of the completely resolved array of indices.
 	This is useful for resolving implicit specifiers.
 
-The resolution table accepts a parsed expression in the form of a
-Javascript Regular Expression object. It reads the information out of
-this object my referencing the captured matches from the regular
-expression, then these functions produce arrays which hold all of the
-indicies that are specified by the index specifier, and in the order
-that they're intended to be specified. 
+The functions in the resolution table of both types accept specifier
+objects. 
+
+For the explicit resolution table, these functions accept a
+single specifier object for the one explicit specifier that's being
+processed.
+
+For the implicit resolution table, these functions accept two
+specifier objects: one for the implicit specifier that's being
+processed, and one for the explicit specifier that's on the same line.
+This second specifier is the specifier that has its information
+borrowed to resolve the implicit specifier.
 
 ## Adding New Specifiers
 

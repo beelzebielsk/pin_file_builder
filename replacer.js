@@ -41,7 +41,18 @@ output.write("TO, LOCATION\n");
 // Get the and file to run replacer on.
 var fileContent = "";
 input.on('data', (chunk) => { fileContent += chunk; } );
-input.on('end', () => replace(fileContent) );
+input.on('end', () => { 
+		try{ 
+			replace(fileContent);
+		} catch (e) { 
+			console.error(e.message); 
+			if (e instanceof SyntaxError) {
+				process.exit(1);
+			} else {
+				process.exit(2)
+			}
+		} 
+	} );
 
 //////////////////////////////////////////////////
 // }}}

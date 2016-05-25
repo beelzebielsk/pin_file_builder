@@ -82,9 +82,12 @@ function processFile(fileContents){
 			processLine(line);
 		} catch (e) {
 			if (e instanceof SyntaxError) { 
-				console.log( "Error at Line Number: " + lineNumber ); 
-				console.log( e.message );
+				console.error( "Error at Line Number: " + lineNumber ); 
+				console.error( e.message );
 				process.exit(1);
+			} else {
+				console.error(e.message);
+				process.exit(2);
 			}
 		}
 		lineNumber++;
@@ -99,7 +102,7 @@ function processFile(fileContents){
 // UTILITY FUNCTIONS : {{{
 // ****************************************
 
-function processLine(line){
+function processLine(line) {
 	// Match line to one of valid line possibilities. So far
 	// thes are:
 	//	- A line with index specifiers
@@ -144,7 +147,7 @@ function processLine(line){
 		throw e;
 	}
 
-	// If both specifiers are explicit, then exit program.
+	// If both specifiers are implicit, then exit program.
 	if (spec0.type === 'i' && spec1.type === 'i'){
 		let error = new SyntaxError;
 		error.message += "Cannot have two implicit specifiers!\n";
