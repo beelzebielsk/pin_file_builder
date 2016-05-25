@@ -1,10 +1,19 @@
 docDir = fancyDocumentation
-styleSheet = $(docDir)/report.css
-phantom = /usr/bin/phantomjs
+values = \
+				 geometry='margin=1in' \
+				 linkcolor='black' \
+				 urlcolor='Mulberry' \
+fancyValues = \
+				 mainfont='heuristica' \
+				 monofont='SourceCodePro'
+variables = $(addprefix -V, $(values))
+fancyVariables = $(addprefix -V, $(fancyValues))
+basicEngine = pdflatex
+fancyEngine = lualatex
 
 
 doc : README.md
-	markdown-pdf --out $(docDir)/$(basename $^).pdf --css-path $(styleSheet) \
-		--phantom-path $(phantom) \
-		$^
+	pandoc -o $(docDir)/$(basename $<).pdf $< --latex-engine=$(basicEngine) $(variables)
 
+fancyDoc : README.md
+	pandoc -o $(docDir)/$(basename $<).pdf $< --latex-engine=$(fancyEngine) $(variables) $(fancyVariables)

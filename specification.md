@@ -1,3 +1,10 @@
+
+---
+title: Pinfile Builder Documentation
+author: Adam Ibrahim
+header-includes:
+	- \usepackage{tcolorbox}
+---
 # Use
 
 This is a program for quickly creating pin assignment files for use with the Altera DE-2 board and Quartus II's FPGA programming software.
@@ -149,9 +156,9 @@ These index specifiers omit some information about which indices to specify. Sin
 
 This means that there must be at least one explciit index specifier on every line.
 
-```
-NOTE: Implicit index specifiers are not limited to 'TO' entries. They can also be used in 'LOCATION' entries.
-```
+\begin{tcolorbox}[title=NOTE]
+Implicit index specifiers are not limited to 'TO' entries. They can also be used in 'LOCATION' entries.
+\end{tcolorbox}
 
 - Range Reuse:
 	- Format : `..`
@@ -261,6 +268,7 @@ All specifier information is kept in `formats.js`. The information is split into
 
 If you would like to add new specifiers of your own to those presented here,
 then you must know the following:
+
 - Every specifier has a format in the formats table and a resolving function in
 	the resolution table.
 - For each specifier, the entries for that specifier in each table must have
@@ -283,6 +291,7 @@ then you must know the following:
 ### Specifier Objects:
 
 The have the following properties:
+
 - content : The completely resolved array of indices.
 - text : The actual specifier.
 - Type : Implicit/Explicit (either 'e' or 'i')
