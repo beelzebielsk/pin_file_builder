@@ -352,7 +352,8 @@ objects have the following properties:
 	*resolution* tables.
 - match   : Type `Array`. The return value of a regular expression match. To see
 	properties of the return value of a match, see [this
-	reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match).
+	reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match)
+	and [this reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/exec).
 	For examples, you can look at the existing resolution function
 	definitions.
 - Length  : The length of the completely resolved array of indices.
