@@ -36,6 +36,8 @@ available for Windows, Mac, and Linux.
 	- `HEX[0..6]` is the same as `HEX0[0..6]`
 	- `HEX[7..13]` is the same as `HEX1[0..6]`,
 	- `HEX[14..20]` is the same as `HEX2[0..6]`, et cetera.
+	- `HEX[0..20]` is the same as all three above lines examples
+		together.
 - Writes the header for your pin file for you (TO, LOCATION).
 
 ### Example
@@ -85,13 +87,15 @@ The latter is easier to maintain, since you can change a lot of assignments quic
 ## How to Use
 
 There are two major programs here, and a front-end written in
-javascript for using these programs.
+javascript for using these programs. All of the javascript files
+need to be in the **same directory**, including any scripts that
+are not explicitly mentioned here.
 
 - **`pinfileBuilder.js`** : This is the front-end. It will take it's
 	input and return a full pin file which can be used with Quartus.
 	Takes input from either standard input, or a file which is specified
 	as an argument, then outputs to either standard output, or a file
-	which is specified as an argument.
+	which is specified as an argument. 
 	- Use:
 		- `node pinfileBuilder.js` : Will take it's input from standard
 			input and write to standard output.

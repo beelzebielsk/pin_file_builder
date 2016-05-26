@@ -5,7 +5,6 @@
 
 "use strict"
 var fs = require('fs');
-var stream = require('stream');
 
 // Has common regular expressions that are useful for
 // validating synatx.
