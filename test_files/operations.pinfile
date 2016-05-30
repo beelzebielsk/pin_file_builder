@@ -1,9 +1,0 @@
-output[0..5], LEDR[..]
-
-op0[0..5], SW[..]
-
-op1[0..5], SW[6..]
-
-opcode[0..2], SW[15..]
-
-execute, KEY[0]

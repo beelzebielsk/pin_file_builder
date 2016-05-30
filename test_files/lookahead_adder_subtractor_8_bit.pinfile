@@ -1,9 +1,0 @@
-A[0..7], SW[..]
-
-B[0..7], SW[8..]
-
-MODE, SW[17]
-
-RESULT[0..7], LEDR[..]
-
-OVERFLOW, LEDR[17]

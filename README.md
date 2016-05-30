@@ -1,1 +1,1 @@
-See fancyDocumentation/specification.pdf
+See specification.pdf.

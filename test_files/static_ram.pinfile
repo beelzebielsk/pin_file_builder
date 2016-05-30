@@ -1,5 +1,0 @@
-data_in, SW[0]
-data_out, LEDR[0]
-SEL, SW[16]
-WRT_EN, SW[17]
-

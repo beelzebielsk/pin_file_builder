@@ -1,5 +1,0 @@
-data_in[0..7], SW[..]
-UNIT_SELECT[0..2], SW[8..]
-CHIP_WE, SW[17]
-CHIP_SEL, SW[16]
-CHIP_OE, SW[15]
