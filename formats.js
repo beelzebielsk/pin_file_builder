@@ -1,3 +1,5 @@
+// EDITED FOR DISPLAYING A MERGE.
+
 "use strict"
 // Placing all of the format information in one place.
 // This seems more sensible considering that the

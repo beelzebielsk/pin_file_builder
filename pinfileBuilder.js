@@ -1,3 +1,5 @@
+// EDITED FOR DISPLAYING A MERGE.
+
 "use strict"
 
 var children = require('child_process');

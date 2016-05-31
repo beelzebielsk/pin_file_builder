@@ -1,3 +1,5 @@
+// EDITED FOR DISPLAYING A MERGE.
+
 "use strict"
 // This function takes arguments which describe
 // information about the potential input and output files
