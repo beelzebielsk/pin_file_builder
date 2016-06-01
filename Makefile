@@ -17,3 +17,6 @@ doc : specification.md
 
 fancyDoc : specification.md
 	pandoc -o $(docDir)/$(basename $<).pdf $< --latex-engine=$(fancyEngine) $(variables) $(fancyVariables)
+
+pegParser : pegjs_parser.pegjs
+	pegjs $< peg_parsing.js

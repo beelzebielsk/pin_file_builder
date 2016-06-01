@@ -185,7 +185,7 @@ These are index specifiers that can be immediately resolved. No extra informatio
 		- `A`: Start
 		- `B`: Step Amount
 		- `C`: End
-	- Specifiers a sequence of indices which are separated by a common difference, or step amount (an arithmetic progression). Sequence starts at `start` and proceeds to the largest number of the form $\text{start} + k \cdot \text{step}$ that is less than or equal to `end`.
+	- Specifies a sequence of indices which are separated by a common difference, or step amount (an arithmetic progression). Sequence starts at `start` and proceeds to the largest number of the form $\text{start} + k \cdot \text{step}$ that is less than or equal to `end`.
 	In other words, A is a start, C is an end, and B is a step amount.
 	- Example : `2:3..10` -> `2,5,8`
 	- Example : `2:3..11` -> `2,5,8,11`

@@ -1,0 +1,6 @@
+butt[0..3], sw[..]
+butt[15..17], sw[..]
+butt[0..3], sw[0..2]
+
+flute[0..3], ledr[3..]
+segments_out[0..55], HEX[..]
