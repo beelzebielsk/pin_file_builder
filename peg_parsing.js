@@ -530,7 +530,7 @@ module.exports = (function() {
                 if (s4 !== peg$FAILED) {
                   s5 = peg$parsewhitespace();
                   if (s5 !== peg$FAILED) {
-                    s6 = peg$parseidentifier();
+                    s6 = peg$parsesignal();
                     if (s6 !== peg$FAILED) {
                       s2 = [s2, s3, s4, s5, s6];
                       s1 = s2;

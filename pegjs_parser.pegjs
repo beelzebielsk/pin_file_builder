@@ -110,7 +110,7 @@ statement =
 			implicitResolutionTable[implicit.specifierInfo.type](explicit.content, implicit.specifierInfo.info);
 		return createSignalList(implicit, explicit);
 	}
-	/ $(signal whitespace ',' whitespace identifier)
+	/ $(signal whitespace ',' whitespace signal)
 
 implicitNameSet = 
 	name:identifier "[" whitespace specifier:implicitIndexSpecifier whitespace "]"
@@ -215,16 +215,16 @@ nonnegative_literal	=
 	/ decimal_literal
 
 binary_literal = 
-	[bB] digits:(binary) 
-	{ return makeInteger(digits, 2); }
+	[bB] digits:binary 
+	{ return makeIntegerdigits, 2; }
 octal_literal =
-	( [oO] / "0" ) digits:(octal) 
+	( [oO] / "0" ) digits:octal 
 	{ return makeInteger(digits, 8); }
 decimal_literal =
-	digits:(decimal)
+	digits:decimal
 	{ return makeInteger(digits, 10); }
 hexadecimal_literal = 
-	( [hH] / "0" [Xx] ) digits:(hexadecimal)
+	( [hH] / "0" [Xx] ) digits:hexadecimal
 	{ return makeInteger(digits, 16); }
 
 decimal = [0-9]+
