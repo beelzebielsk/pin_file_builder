@@ -13,6 +13,8 @@ fancyEngine = lualatex
 testFilesDir = $(realpath ./test_files/)
 labsDir = ~/homework/csc342-343
 
+finalFiles := 
+
 
 doc : specification.md
 	pandoc -o $(docDir)/$(basename $<).pdf $< --latex-engine=$(basicEngine) $(variables)
@@ -33,3 +35,11 @@ fetchPinFiles :
 				echo $$lab; \
 		fi; \
 	done;
+
+# make the final branch
+# Set a finalFiles variable.
+# Checkout the final branch.
+# Remove everything in the branch, then have it checkout all of the files from `finalFiles`.
+
+#.PHONY : finalBranch
+#finalBranch
