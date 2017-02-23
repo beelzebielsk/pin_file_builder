@@ -110,7 +110,8 @@ statement =
 			implicitResolutionTable[implicit.specifierInfo.type](explicit.content, implicit.specifierInfo.info);
 		return createSignalList(implicit, explicit);
 	}
-	/ $(signal whitespace ',' whitespace signal)
+	/ left:signal whitespace ',' whitespace right:signal
+	{ return left + ", " + pinTable[right.toUpperCase()]; }
 
 implicitNameSet = 
 	name:identifier "[" whitespace specifier:implicitIndexSpecifier whitespace "]"

@@ -12,7 +12,7 @@ input.on('end', () => {
 		output.write( "TO, LOCATION\n" );
 		output.write( parser.parse(inputContent.trim()) );
 	} catch (e) {
-		if (e.location) {
+		if (e.location) { // Catch error from parser.
 			console.error("Line:", e.location.start.line + ',', "Column:", e.location.start.column, '|', e.message);
 			console.error("Offending content:", e.found);
 			process.exit(1);
