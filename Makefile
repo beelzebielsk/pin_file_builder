@@ -25,8 +25,8 @@ fancyDoc : specification.md
 pegParser : pegjs_parser.pegjs
 	pegjs $< peg_parsing.js
 
-	#$(foreach lab, $(wildcard lab*), cp -Ru $(lab)/project/pin_assignments -t $(testFilesDir) )
-	#@$(foreach lab, $(wildcard $(labsDir)/lab*), if [-d $(lab)] then echo $(lab); fi \) 
+#$(foreach lab, $(wildcard lab*), cp -Ru $(lab)/project/pin_assignments -t $(testFilesDir) )
+#@$(foreach lab, $(wildcard $(labsDir)/lab*), if [-d $(lab)] then echo $(lab); fi \) 
 .PHONY : fetchPinFiles
 fetchPinFiles :
 	for lab in $$(echo $(labsDir)/lab*); do \

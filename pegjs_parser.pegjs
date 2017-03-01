@@ -85,7 +85,16 @@ start = statements
 statements =
 	head:statement tail:(whitespace statement)*
 	{ return [head].concat( tail.map( (result) => result[1] ) ).reduce( (prev, cur) => prev.concat(cur), [] ).join('\n'); }
+	// Each statement returns a signal list. So everything before the 'reduce'
+	// statement gives us an array of signal lists, or an array of arrays.  The
+	// reduce 'flattens' the array, because by contcatenating the list of arrays
+	// into one array, I get an array of signal -> pin assignments.
 
+
+// The error statement is only here because every other valid form cotains an
+// implicit specifier, and implicit specifiers are built such that they match
+// the lenfth of the other explicit specifier. Notice that one cannot use two
+// implicit specifiers.
 
 statement = 
 	left_set:explicitNameSet whitespace "," whitespace right_set:explicitNameSet
@@ -112,6 +121,7 @@ statement =
 	}
 	/ left:signal whitespace ',' whitespace right:signal
 	{ return left + ", " + pinTable[right.toUpperCase()]; }
+	/ comment
 
 implicitNameSet = 
 	name:identifier "[" whitespace specifier:implicitIndexSpecifier whitespace "]"
@@ -120,6 +130,11 @@ explicitNameSet =
 	name:identifier "[" whitespace indicies:explicitIndexSpecifier whitespace "]"
 	{ return { signalName : name, content : indicies }; }
 
+// This is a hack. The final step is concatenation of signal lists, followed by
+// concatenation of those signal lists into a single master list of pin
+// asassignments. Having a comment pass an empty list means that the
+// concatenations aren't effected.
+comment = "#" non_newlines { return []; }
 signal = $( identifier ('[' nonnegative_literal ']' ) ? )
 identifier = $( (alpha / "_") ( "_" / alpha / numeric)* )
 alphanumeric = ([a-zA-Z0-9])
@@ -233,6 +248,7 @@ binary =  [01]+
 octal =  [0-7]+ 
 hexadecimal =  [0-9a-fA-F]+
 whitespace = [ \t\n\r]*
+non_newlines = [^\n\r]*
 
 //////////////////////////////////////////////////
 // }}}
